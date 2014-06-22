@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
         'Codesleeve\AssetPipeline\AssetPipelineServiceProvider',
         'Thujohn\Twitter\TwitterServiceProvider',
+        'Barryvdh\Debugbar\ServiceProvider',
 
 	),
 
@@ -190,14 +191,8 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-        'Twitter' => 'Thujohn\Twitter\TwitterFacade',
+        'Twitter'         => 'Thujohn\Twitter\TwitterFacade',
 
 	),
-
-    'twitter' => array(
-        'key' => '72XsNwUvJjw0xaSinIk1mzHL0',
-        'secret' => 'OOEOC6ECsFbiXK63VD2tX2zWFoUlAk0i420TVVFnSWPDzoNaML',
-        'callback' => "http://friendscloud.app:8000/twitter/callback",
-    ),
 
 );

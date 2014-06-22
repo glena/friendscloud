@@ -4,12 +4,19 @@ class TwitterController extends BaseController {
 
     protected $server;
 
-    protected function __construct()
+    public function __construct()
+    {
+        $this->beforeFilter(function(){
+            $this->initServer();
+        });
+    }
+
+    protected function initServer()
     {
         $this->server = new League\OAuth1\Client\Server\Twitter(array(
-            'identifier' => Config::get('app.twitter.key'),
-            'secret' => Config::get('app.twitter.secret'),
-            'callback_uri' => Config::get('app.twitter.callback'),
+            'identifier' => Config::get('twitter::CONSUMER_KEY'),
+            'secret' => Config::get('twitter::CONSUMER_SECRET'),
+            'callback_uri' => Config::get('twitter::callback'),
         ));
     }
 
@@ -39,22 +46,21 @@ class TwitterController extends BaseController {
         // We will now retrieve token credentials from the server
         $tokenCredentials = $this->server->getTokenCredentials($temporaryCredentials, $_GET['oauth_token'], $_GET['oauth_verifier']);
 
-        Session::put('twitterCredentials', serialize($tokenCredentials));
+        Session::put('access_token', [
+            'oauth_token' => $tokenCredentials->getIdentifier(),
+            'oauth_token_secret' => $tokenCredentials->getSecret(),
+        ]);
 
         return Redirect::route('friends-cloud');
     }
 
-    public function following()
+    public function friends(TwitterDecorator $twitter)
     {
-        //followers/list
-        $tokenCredentials = unserialize(Session::get('twitterCredentials'));
-        $this->server->getUserScreenName($tokenCredentials);
+        return $twitter->getFriends();
     }
 
-    public function followers()
+    public function followers(TwitterDecorator $twitter)
     {
-        //friends/list
-        $tokenCredentials = unserialize(Session::get('twitterCredentials'));
-        $this->server->getUserScreenName($tokenCredentials);
+        return $twitter->getFollowers();
     }
 }
