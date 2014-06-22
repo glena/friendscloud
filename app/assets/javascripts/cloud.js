@@ -46,29 +46,31 @@ function loadCloud(data)
             .style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
 
+    var filters = svg.selectAll(".filters")
+        .data(data.nodes)
+        .enter()
+            .append("filter")
+            .attr("class", "filters")
+            .attr("id", function(d){ return 'filter_' + d.id; })
+            .attr("x", "0%")
+            .attr("y", "0%")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .append("feImage")
+                .attr("xlink:href", function(d){ return d.profile_image_url; });
+
+
+
     var node = svg.selectAll(".node")
         .data(data.nodes)
         .enter()
         .append("circle")
-        .attr("class", "node")
-        .attr("r", 20)
-        .call(force.drag);
+            .attr("class", "node")
+            .attr("r", 20)
+            .attr("filter", function(d){ return 'url(#filter_' + d.id + ')'; })
+            .call(force.drag);
 
-    /*
-    var node = svg.selectAll(".node")
-        .data(data.nodes)
-        .enter()
-            .append("circle")
-            .attr("r", 50)
-            .attr("class", "node");
-
-    node.append("image")
-        .attr('width',30)
-        .attr('height',30)
-        .attr("xlink:href", function(d){return d.profile_image_url ? d.profile_image_url.replace('_normal','') : ''; });
-
-    node.call(force.drag);
-*/
+    //<rect x = "0" y = "0" width = "100%" height = "100%" filter = "url(#i1)"/>
 
     force.on("tick", function() {
         link.attr("x1", function(d) { return d.source.x; })
@@ -84,11 +86,13 @@ function loadCloud(data)
 function remapUserData(data)
 {
     var newdata = {
-        nodes:[{name:'currentuser'}],
+        nodes:[
+            data.loggeduser
+        ],
         links:[]
     };
 
-    data.forEach(function(e, i){
+    data.friends.forEach(function(e, i){
         newdata.nodes.push(e);
         newdata.links.push({
             source:0,

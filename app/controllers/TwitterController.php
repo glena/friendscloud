@@ -59,14 +59,26 @@ class TwitterController extends BaseController {
 
     public function friends()
     {
-        $data = $this->twitter->getFriends();
-        return $this->mapUsersResponse($data);
+        $data = $this->twitter->getFriends(['count' => 200]);
+
+        return [
+            'loggeduser' => $this->userData(),
+            'friends' => $this->mapUsersResponse($data),
+        ];
+    }
+
+    public function userData()
+    {
+        return $this->twitter->mapUser($this->twitter->getCredentials());
     }
 
     public function followers()
     {
         $data = $this->twitter->getFollowers();
-        return $this->mapUsersResponse($data);
+        return [
+            'loggeduser' => $this->userData(),
+            'friends' => $this->mapUsersResponse($data),
+        ];
     }
 
     protected function mapUsersResponse($data)
@@ -76,14 +88,7 @@ class TwitterController extends BaseController {
 
         foreach ($data->users as $friend)
         {
-            $response[] = [
-                'id' => $friend->id,
-                'name' => $friend->name,
-                'screen_name' => $friend->screen_name,
-                'followers_count' => $friend->followers_count,
-                'friends_count' => $friend->friends_count,
-                'profile_image_url' => $friend->profile_image_url,
-            ];
+            $response[] = $this->twitter->mapUser($friend);
         }
 
         return $response;

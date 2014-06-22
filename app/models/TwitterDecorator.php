@@ -32,7 +32,7 @@ class TwitterDecorator {
 
         if (!Cache::has($key))
         {
-            $return = call_user_func("Twitter::$name", $arguments);
+            $return = call_user_func_array("Twitter::$name", $arguments);
             Cache::forever($key, $return);
         }
         else
@@ -40,9 +40,19 @@ class TwitterDecorator {
             $return = Cache::get($key);
         }
 
-
-
         return $return;
+    }
+
+    public function mapUser($user)
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'screen_name' => $user->screen_name,
+            'followers_count' => $user->followers_count,
+            'friends_count' => $user->friends_count,
+            'profile_image_url' => $user->profile_image_url,
+        ];
     }
 
 } 
