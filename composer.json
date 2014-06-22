@@ -5,8 +5,10 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-        "league/oauth1-client": "~1.0"
-	},
+        "league/oauth1-client": "~1.0",
+        "codesleeve/asset-pipeline": "dev-master",
+        "thujohn/twitter": "dev-master"
+    },
 	"autoload": {
 		"classmap": [
 			"app/commands",
