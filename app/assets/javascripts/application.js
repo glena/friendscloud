@@ -12,4 +12,5 @@
 //
 //= require jquery
 //= require_tree .
+//= include d3.min.js
 //= include cloud.js

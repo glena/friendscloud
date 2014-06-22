@@ -3,9 +3,12 @@
 class TwitterController extends BaseController {
 
     protected $server;
+    protected $twitter;
 
-    public function __construct()
+    public function __construct(TwitterDecorator $twitter)
     {
+        $this->twitter = $twitter;
+
         $this->beforeFilter(function(){
             $this->initServer();
         });
@@ -54,13 +57,35 @@ class TwitterController extends BaseController {
         return Redirect::route('friends-cloud');
     }
 
-    public function friends(TwitterDecorator $twitter)
+    public function friends()
     {
-        return $twitter->getFriends();
+        $data = $this->twitter->getFriends();
+        return $this->mapUsersResponse($data);
     }
 
-    public function followers(TwitterDecorator $twitter)
+    public function followers()
     {
-        return $twitter->getFollowers();
+        $data = $this->twitter->getFollowers();
+        return $this->mapUsersResponse($data);
+    }
+
+    protected function mapUsersResponse($data)
+    {
+        $response = [];
+
+
+        foreach ($data->users as $friend)
+        {
+            $response[] = [
+                'id' => $friend->id,
+                'name' => $friend->name,
+                'screen_name' => $friend->screen_name,
+                'followers_count' => $friend->followers_count,
+                'friends_count' => $friend->friends_count,
+                'profile_image_url' => $friend->profile_image_url,
+            ];
+        }
+
+        return $response;
     }
 }

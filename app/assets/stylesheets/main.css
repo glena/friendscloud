@@ -1,0 +1,23 @@
+body {
+    background: transparent url('/assets/jet-sky.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#background_copy{
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.link {
+    stroke: #000000;
+    stroke-opacity: .6;
+}

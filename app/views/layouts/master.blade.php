@@ -12,5 +12,7 @@
     @yield('content')
 
     {{ javascript_include_tag() }}
+
+    @yield('inlineScripts')
 </body>
 </html>

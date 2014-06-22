@@ -1,5 +1,14 @@
 @extends('layouts.master')
 
 @section('content')
-<p>Cloud</p>
+
+@stop
+
+@section('inlineScripts')
+<script>
+    $(document).ready(function(){
+        initCloud();
+        loadFriends();
+    });
+</script>
 @stop
