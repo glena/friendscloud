@@ -6,6 +6,7 @@
 
 Route::get('/', array('as'=>'index', 'uses'=>'HomeController@index'));
 Route::get('cloud', array('as'=>'friends-cloud', 'uses'=>'HomeController@cloud'));
+Route::get('monitor', array('as'=>'monitor', 'uses'=>'HomeController@monitor'));
 
 Route::get('twitter/login',array('as'=>'twitter-login', 'uses'=>'TwitterController@login'));
 Route::get('twitter/callback',array('as'=>'twitter-callback', 'uses'=>'TwitterController@callback'));

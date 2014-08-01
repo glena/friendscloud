@@ -19,6 +19,7 @@
     @ {{$userinfo->screen_name}}
 
     <a href="/cloud">Cloud</a>
+    <a href="/monitor">Monitor</a>
 @else
     <h3>Login with twitter to see your cloud</h3>
     <a href="/twitter/login">Login</a>

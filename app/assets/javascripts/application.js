@@ -11,6 +11,9 @@
 // The available directives right now are require, require_directory, and require_tree
 //
 //= require jquery
-//= require_tree .
 //= include d3.min.js
 //= include cloud.js
+//= include angular.min.js
+//= include lodash.js
+//= include restangular.min.js
+//= include monitor-controllers.js

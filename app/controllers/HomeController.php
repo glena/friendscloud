@@ -21,4 +21,9 @@ class HomeController extends BaseController {
         return View::make('home.cloud');
     }
 
+    public function monitor()
+    {
+        return View::make('home.monitor');
+    }
+
 }

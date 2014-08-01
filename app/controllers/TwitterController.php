@@ -11,7 +11,7 @@ class TwitterController extends BaseController {
 
         $this->beforeFilter(function(){
             $this->initServer();
-        });
+        }, ['only' => ['login', 'callback']]);
     }
 
     protected function initServer()
@@ -54,43 +54,62 @@ class TwitterController extends BaseController {
             'oauth_token_secret' => $tokenCredentials->getSecret(),
         ]);
 
-        return Redirect::route('friends-cloud');
+        return Redirect::route('monitor');
     }
 
     public function friends()
     {
-        $data = $this->twitter->getFriends(['count' => 200]);
+        return $this->genericUsersResponse(function($params) {
+            return $this->twitter->getFriends($params);
+        });
+    }
 
-        return [
-            'loggeduser' => $this->userData(),
-            'friends' => $this->mapUsersResponse($data),
-        ];
+    public function followers()
+    {
+        return $this->genericUsersResponse(function($params) {
+            return $this->twitter->getFollowers($params);
+        });
+    }
+
+    protected function genericUsersResponse($closure)
+    {
+        $params = ['count' => 200];
+        $response = [];
+        $cursor = null;
+
+        do
+        {
+            if ($cursor)
+            {
+                $params['cursor'] = $cursor;
+            }
+
+            $data = $closure($params);
+            $processed_data = $this->mapUsersResponse($data);
+
+            $response = array_merge($response, $processed_data);
+        }
+        while($cursor = $data->next_cursor_str);
+
+
+        return $response;
+
+//        return [
+//            'loggeduser' => $this->userData(),
+//            'data' => $response,
+//            'next_cursor_str' => $data->next_cursor_str
+//        ];
+    }
+
+    protected function mapUsersResponse($data)
+    {
+        return array_map(function($friend){
+            return $this->twitter->mapUser($friend);
+        },$data->users);
     }
 
     public function userData()
     {
         return $this->twitter->mapUser($this->twitter->getCredentials());
-    }
-
-    public function followers()
-    {
-        $data = $this->twitter->getFollowers();
-        return [
-            'loggeduser' => $this->userData(),
-            'friends' => $this->mapUsersResponse($data),
-        ];
-    }
-
-    protected function mapUsersResponse($data)
-    {
-        $response = [];
-
-
-        foreach ($data->users as $friend)
-        {
-            $response[] = $this->twitter->mapUser($friend);
-        }
-
-        return $response;
     }
 }
