@@ -1,5 +1,16 @@
 <?php
 
+/*
+http://laravel.com/docs/redis#configuration
+
+Beanstalkd
+Listen Address: 0.0.0.0
+Listen Port: 13000
+Max Job Size: 65535
+Max Connections: 1024
+Binlog Directory: /var/lib/beanstalkd/binlog
+*/
+
 class HomeController extends BaseController {
 
     protected $twitter;

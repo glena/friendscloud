@@ -12,5 +12,5 @@ return array(
 	'ACCESS_TOKEN'        => '',
 	'ACCESS_TOKEN_SECRET' => '',
 
-    'callback'            => "http://friendscloud.app:8000/twitter/callback",
+    'callback'            => "http://friendscloud.app/twitter/callback",
 );
