@@ -19,7 +19,7 @@ class TwitterController extends BaseController {
         $this->server = new League\OAuth1\Client\Server\Twitter(array(
             'identifier' => Config::get('twitter::CONSUMER_KEY'),
             'secret' => Config::get('twitter::CONSUMER_SECRET'),
-            'callback_uri' => Config::get('twitter::callback'),
+            'callback_uri' => Config::get('twitter::CALLBACK'),
         ));
     }
 
@@ -54,7 +54,14 @@ class TwitterController extends BaseController {
             'oauth_token_secret' => $tokenCredentials->getSecret(),
         ]);
 
+        $this->initializeIndexing();
+
         return Redirect::route('monitor');
+    }
+
+    protected function initializeIndexing()
+    {
+        $userinfo = $this->twitter->getCredentials();
     }
 
     public function friends()
@@ -93,12 +100,6 @@ class TwitterController extends BaseController {
 
 
         return $response;
-
-//        return [
-//            'loggeduser' => $this->userData(),
-//            'data' => $response,
-//            'next_cursor_str' => $data->next_cursor_str
-//        ];
     }
 
     protected function mapUsersResponse($data)

@@ -1,8 +1,8 @@
 ---
 vagrantfile-local:
     vm:
-        box: puphpet/ubuntu1404-x64
-        box_url: puphpet/ubuntu1404-x64
+        box: puphpet/debian75-x64
+        box_url: puphpet/debian75-x64
         hostname: null
         memory: '512'
         cpus: '1'
@@ -10,9 +10,12 @@ vagrantfile-local:
         network:
             private_network: 192.168.56.101
             forwarded_port:
-                Ouk9YFgfipM6:
-                    host: '8539'
+                A3kXtFMNcnri:
+                    host: '9263'
                     guest: '22'
+                DekTtOFtvp1Z:
+                    host: '5433'
+                    guest: '5432'
         provider:
             virtualbox:
                 modifyvm:
@@ -33,9 +36,9 @@ vagrantfile-local:
                     - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
                     - '--parser future'
         synced_folder:
-            2O3lzd87dkHe:
+            BfGVamzaQV3B:
                 source: ./
-                target: /var/www/friendscloud
+                target: /var/www/friendscloud.app
                 sync_type: default
                 rsync:
                     args:
@@ -60,12 +63,18 @@ vagrantfile-local:
         host: detect
 server:
     install: '1'
-    packages: {  }
+    packages:
+        - vim
 firewall:
     install: '1'
-    rules: null
+    rules:
+        efiH13WzEnUL:
+            port: '5432'
+            priority: '100'
+            proto: tcp
+            action: accept
 apache:
-    install: 0
+    install: '1'
     settings:
         user: www-data
         group: www-data
@@ -76,11 +85,11 @@ apache:
     modules:
         - rewrite
     vhosts:
-        m4I4ssLgar6a:
-            servername: awesome.dev
+        ROqhUGQlxdTV:
+            servername: friendscloud.app
             serveraliases:
-                - www.awesome.dev
-            docroot: /var/www/awesome
+                - www.friendscloud.app
+            docroot: /var/www/friendscloud.app/public
             port: '80'
             setenv:
                 - 'APP_ENV dev'
@@ -96,20 +105,20 @@ apache:
             ssl_key: ''
             ssl_chain: ''
             ssl_certs_dir: ''
-    mod_pagespeed: 0
+    mod_pagespeed: '0'
     mod_spdy: 0
 nginx:
-    install: '1'
+    install: '0'
     settings:
         default_vhost: 1
         proxy_buffer_size: 128k
         proxy_buffers: '4 256k'
     vhosts:
-        HE3HFXO90y8k:
-            server_name: friendscloud.app
+        P6u28p6o8U7L:
+            server_name: awesome.dev
             server_aliases:
-                - www.friendscloud.app
-            www_root: /var/www/friendscloud/public
+                - www.awesome.dev
+            www_root: /var/www/awesome.dev
             listen_port: '80'
             index_files:
                 - index.html
@@ -130,6 +139,7 @@ php:
             - cli
             - intl
             - mcrypt
+            - curl
         pear: {  }
         pecl:
             - pecl_http
@@ -166,7 +176,7 @@ drush:
 ruby:
     install: '1'
     versions:
-        INy9vpnwjJa5:
+        VyXH1YSCFMp5:
             version: ''
 nodejs:
     install: '0'
@@ -176,7 +186,7 @@ mysql:
     root_password: '123'
     adminer: 0
     databases:
-        9SZjNRkkDyfr:
+        o8TEkMKyYL20:
             grant:
                 - ALL
             name: dbname
@@ -185,13 +195,19 @@ mysql:
             password: '123'
             sql_file: ''
 postgresql:
-    install: '0'
+    install: '1'
     settings:
         root_password: '123'
         user_group: postgres
         encoding: UTF8
         version: '9.3'
-    databases: {  }
+    databases:
+        ze3bLMQixhHU:
+            grant: ALL
+            name: friendscloud
+            user: friendscloud
+            password: friendscloud
+            sql_file: ''
     adminer: 0
 mariadb:
     install: '0'
@@ -210,7 +226,7 @@ mongodb:
         port: '27017'
     databases: {  }
 redis:
-    install: '1'
+    install: '0'
     settings:
         conf_port: '6379'
 mailcatcher:
@@ -238,7 +254,7 @@ rabbitmq:
     settings:
         port: '5672'
 elastic_search:
-    install: '0'
+    install: '1'
     settings:
         java_install: true
         autoupgrade: true

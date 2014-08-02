@@ -8,7 +8,8 @@
         "league/oauth1-client": "~1.0",
         "codesleeve/asset-pipeline": "dev-master",
         "thujohn/twitter": "dev-master",
-        "barryvdh/laravel-debugbar": "1.*"
+        "barryvdh/laravel-debugbar": "1.*",
+        "pda/pheanstalk": "~2.0"
     },
 	"autoload": {
 		"classmap": [

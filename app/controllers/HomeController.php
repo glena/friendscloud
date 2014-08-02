@@ -23,7 +23,6 @@ class HomeController extends BaseController {
     public function index()
     {
         $userinfo = $this->twitter->getCredentials();
-
         return View::make('home.index', array('userinfo' => $userinfo));
     }
 

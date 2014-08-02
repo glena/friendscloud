@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => '',
+	'default' => 'pgsql',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -66,9 +66,9 @@ return array(
 		'pgsql' => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',
-			'database' => 'forge',
-			'username' => 'forge',
-			'password' => '',
+			'database' => 'friendscloud',
+			'username' => 'friendscloud',
+			'password' => 'friendscloud',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',
