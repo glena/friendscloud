@@ -17,9 +17,9 @@ class TwitterController extends BaseController {
     protected function initServer()
     {
         $this->server = new League\OAuth1\Client\Server\Twitter(array(
-            'identifier' => Config::get('twitter::CONSUMER_KEY'),
-            'secret' => Config::get('twitter::CONSUMER_SECRET'),
-            'callback_uri' => Config::get('twitter::CALLBACK'),
+            'identifier' => Config::get('thujohn/twitter::CONSUMER_KEY'),
+            'secret' => Config::get('thujohn/twitter::CONSUMER_SECRET'),
+            'callback_uri' => Config::get('thujohn/twitter::CALLBACK'),
         ));
     }
 
