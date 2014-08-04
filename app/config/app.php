@@ -124,6 +124,7 @@ return array(
         'Codesleeve\AssetPipeline\AssetPipelineServiceProvider',
         'Thujohn\Twitter\TwitterServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
+        'Way\Generators\GeneratorsServiceProvider',
 
 	),
 

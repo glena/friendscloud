@@ -11,8 +11,6 @@ Max Connections: 1024
 Binlog Directory: /var/lib/beanstalkd/binlog
 
 
-http://stackoverflow.com/questions/25097431/laravel-not-loading-package-configuration
-
 http://laravel.com/docs/redis
 http://laravel.com/docs/queues
 

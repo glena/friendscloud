@@ -143,6 +143,7 @@ php:
         pear: {  }
         pecl:
             - pecl_http
+            - PDO_PGSQL
     ini:
         display_errors: On
         error_reporting: '-1'
@@ -241,7 +242,7 @@ beanstalkd:
     install: '1'
     settings:
         listenaddress: 0.0.0.0
-        listenport: '13000'
+        listenport: '11300'
         maxjobsize: '65535'
         maxconnections: '1024'
         binlogdir: /var/lib/beanstalkd/binlog

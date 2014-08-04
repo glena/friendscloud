@@ -4,10 +4,12 @@ class TwitterController extends BaseController {
 
     protected $server;
     protected $twitter;
+    protected $twitterhandlerRepository;
 
-    public function __construct(TwitterDecorator $twitter)
+    public function __construct(TwitterDecorator $twitter, TwitterHandlerRepostory $twitterhandlerRepository)
     {
         $this->twitter = $twitter;
+        $this->twitterhandlerRepository = $twitterhandlerRepository;
 
         $this->beforeFilter(function(){
             $this->initServer();
@@ -54,14 +56,42 @@ class TwitterController extends BaseController {
             'oauth_token_secret' => $tokenCredentials->getSecret(),
         ]);
 
-        $this->initializeIndexing();
+        $this->createUser($tokenCredentials->getIdentifier(), $tokenCredentials->getSecret());
 
-        return Redirect::route('monitor');
+        return Redirect::route('index');
     }
 
-    protected function initializeIndexing()
+    protected function createUser($oauth_token, $oauth_token_secret)
     {
         $userinfo = $this->twitter->getCredentials();
+
+        $handler = $this->twitterhandlerRepository->getByUUID($userinfo->id);
+
+        if (!$handler)
+        {
+            $handler = new TwitterHandler();
+        }
+
+        $handler->uuid = $userinfo->id;
+        $handler->handler = $userinfo->screen_name;
+        $handler->name = $userinfo->name;
+        $handler->location = $userinfo->location;
+        $handler->description = $userinfo->description;
+        $handler->status = 'pending';
+        $handler->oauth_token = 'pending';
+        $handler->oauth_token_secret = 'pending';
+        $handler->image = str_replace('_normal.jpeg','_bigger.jpeg',$userinfo->profile_image_url);
+
+        if (isset($userinfo->entities->url) &&
+            isset($userinfo->entities->url->urls[0]) &&
+            isset($userinfo->entities->url->urls[0]->expanded_url))
+        {
+            $handler->url = $userinfo->entities->url->urls[0]->expanded_url;
+        }
+
+        $handler->save();
+
+        Queue::push('CrawlHandler@main', array('handler' => $handler));
     }
 
     public function friends()
