@@ -4,11 +4,13 @@ class TwitterController extends BaseController {
 
     protected $server;
     protected $twitter;
+    protected $mapper;
     protected $twitterhandlerRepository;
 
-    public function __construct(TwitterDecorator $twitter, TwitterHandlerRepostory $twitterhandlerRepository)
+    public function __construct(TwitterDecorator $twitter, TwitterHandlerRepostory $twitterhandlerRepository, HandlerMapper $mapper)
     {
         $this->twitter = $twitter;
+        $this->mapper = $mapper;
         $this->twitterhandlerRepository = $twitterhandlerRepository;
 
         $this->beforeFilter(function(){
@@ -18,11 +20,11 @@ class TwitterController extends BaseController {
 
     protected function initServer()
     {
-        $this->server = new League\OAuth1\Client\Server\Twitter(array(
+        $this->server = new League\OAuth1\Client\Server\Twitter([
             'identifier' => Config::get('thujohn/twitter::CONSUMER_KEY'),
             'secret' => Config::get('thujohn/twitter::CONSUMER_SECRET'),
             'callback_uri' => Config::get('thujohn/twitter::CALLBACK'),
-        ));
+        ]);
     }
 
     public function login()
@@ -63,35 +65,13 @@ class TwitterController extends BaseController {
 
     protected function createUser($oauth_token, $oauth_token_secret)
     {
-        $userinfo = $this->twitter->getCredentials();
+        $handler = $this->mapper->map($this->twitter->getCredentials(),
+                                        $oauth_token,
+                                        $oauth_token_secret);
 
-        $handler = $this->twitterhandlerRepository->getByUUID($userinfo->id);
+        $this->twitterhandlerRepository->persist($handler);
 
-        if (!$handler)
-        {
-            $handler = new TwitterHandler();
-        }
-
-        $handler->uuid = $userinfo->id;
-        $handler->handler = $userinfo->screen_name;
-        $handler->name = $userinfo->name;
-        $handler->location = $userinfo->location;
-        $handler->description = $userinfo->description;
-        $handler->status = 'pending';
-        $handler->oauth_token = 'pending';
-        $handler->oauth_token_secret = 'pending';
-        $handler->image = str_replace('_normal.jpeg','_bigger.jpeg',$userinfo->profile_image_url);
-
-        if (isset($userinfo->entities->url) &&
-            isset($userinfo->entities->url->urls[0]) &&
-            isset($userinfo->entities->url->urls[0]->expanded_url))
-        {
-            $handler->url = $userinfo->entities->url->urls[0]->expanded_url;
-        }
-
-        $handler->save();
-
-        Queue::push('CrawlHandler@main', array('handler' => $handler));
+        Queue::push('CrawlHandler@main', ['handler_id' => $handler->id]);
     }
 
     public function friends()

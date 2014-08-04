@@ -12,7 +12,7 @@ class CreateTwitterHandlerTwitterHandlerTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('twitter_handler_twitter_handler', function(Blueprint $table)
+		Schema::create('twitter_handler_follow', function(Blueprint $table)
 		{
 			$table->increments('id');
 
@@ -33,7 +33,7 @@ class CreateTwitterHandlerTwitterHandlerTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('twitter_handler_twitter_handler');
+		Schema::drop('twitter_handler_follow');
 	}
 
 }

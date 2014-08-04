@@ -14,8 +14,8 @@ class AddTokensToTwitterHandlersTable extends Migration {
 	{
 		Schema::table('twitter_handlers', function(Blueprint $table)
 		{
-            $table->string('oauth_token');
-            $table->string('oauth_token_secret');
+            $table->string('oauth_token')->nullable();
+            $table->string('oauth_token_secret')->nullable();
 		});
 	}
 

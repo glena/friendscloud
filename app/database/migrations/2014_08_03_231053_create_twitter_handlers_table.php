@@ -22,7 +22,7 @@ class CreateTwitterHandlersTable extends Migration {
             $table->string('name');
             $table->string('location');
             $table->string('description');
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->string('image');
 
 			$table->timestamps();
